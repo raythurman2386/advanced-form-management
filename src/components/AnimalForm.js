@@ -1,10 +1,19 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { withFormik, Form, Field } from 'formik'
 import * as Yup from 'yup'
 import Axios from 'axios'
 
 const AnimalForm = ({ errors, touched, status }) => {
+  const [animals, setAnimals] = useState([])
   console.log(status)
+
+  // subscribe to update state
+  useEffect(() => {
+    if (status) {
+      setAnimals([...animals, status])
+    }
+  }, [status])
+
   return (
     <Form>
       {touched.species && errors.species && (
@@ -31,9 +40,10 @@ const AnimalForm = ({ errors, touched, status }) => {
       </label>
       <Field component='textarea' name='notes' placeholder='Notes' />
       <button type='submit'>Submit</button>
-      Species: {status.species}
-      <br />
-      Age: {status.age}
+
+      {animals.map(animal => (
+        <div>{animal.species}</div>
+      ))}
     </Form>
   )
 }
